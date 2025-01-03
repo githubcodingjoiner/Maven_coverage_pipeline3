@@ -61,5 +61,10 @@ pipeline {
         failure {
             echo "Did not work"
         }
+         always {
+            archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
+            junit 'target/test-results/*.xml'
+        }
+
     }
 }
