@@ -3,19 +3,13 @@ package com.example.automation;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-
-import java.time.Duration;
 
 public class LoginPage {
     private final WebDriver driver;
-    private final WebDriverWait wait;
 
-    // Constructor to initialize WebDriver and WebDriverWait
+    // Constructor to initialize WebDriver
     public LoginPage(WebDriver driver) {
         this.driver = driver;
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
     // Navigate to the login page
@@ -25,53 +19,42 @@ public class LoginPage {
 
     // Enter username
     public void setUsername(String username) {
-        WebElement usernameField = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("username")));
-        usernameField.clear(); // Clear existing text
+        WebElement usernameField = driver.findElement(By.id("username"));
         usernameField.sendKeys(username);
     }
 
     // Enter password
     public void setPassword(String password) {
-        WebElement passwordField = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("password")));
-        passwordField.clear(); // Clear existing text
+        WebElement passwordField = driver.findElement(By.id("password"));
         passwordField.sendKeys(password);
     }
 
     // Click the login button
     public void clickLoginButton() {
-        WebElement loginButton = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("button[type='submit']")));
+        WebElement loginButton = driver.findElement(By.cssSelector("button[type='submit']"));
         loginButton.click();
     }
 
     // Get the success message for validation
     public String getSuccessMessage() {
-        WebElement messageElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("flash")));
+        WebElement messageElement = driver.findElement(By.id("flash"));
         return messageElement.getText();
     }
 
-    // Additional functions
-    // 1. Get the error message for validation
-    public String getErrorMessage() {
-        WebElement errorElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("flash")));
-        return errorElement.getText();
+    // Perform logout
+    public void logout() {
+        WebElement logoutButton = driver.findElement(By.cssSelector("a[href='/logout']")); // Assuming logout is a link
+        logoutButton.click();
     }
 
-    // 2. Check if login button is enabled
-    public boolean isLoginButtonEnabled() {
-        WebElement loginButton = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("button[type='submit']")));
-        return loginButton.isEnabled();
-    }
-
-    // 3. Validate current page URL
-    public String getCurrentUrl() {
-        return driver.getCurrentUrl();
-    }
-
-    // 4. Clear all fields
-    public void clearFields() {
-        WebElement usernameField = driver.findElement(By.id("username"));
-        WebElement passwordField = driver.findElement(By.id("password"));
-        usernameField.clear();
-        passwordField.clear();
+    // Check if the current page is the login page
+    public boolean isLoginPageDisplayed() {
+        try {
+            driver.findElement(By.id("username")); // Assuming the username field is unique to the login page
+            driver.findElement(By.id("password"));
+            return true; // Elements are found, hence login page is displayed
+        } catch (Exception e) {
+            return false; // Elements not found, hence not on the login page
+        }
     }
 }
