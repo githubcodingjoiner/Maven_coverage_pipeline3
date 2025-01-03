@@ -1,29 +1,43 @@
 package com.example.automation;
 
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+
 public class LoginPage {
-    private String username;
-    private String password;
-    private boolean isLoggedIn;
+    private final WebDriver driver;
 
-    public LoginPage() {
-        this.isLoggedIn = false;
+    // Constructor to initialize WebDriver
+    public LoginPage(WebDriver driver) {
+        this.driver = driver;
     }
 
+    // Navigate to the login page
+    public void openLoginPage(String url) {
+        driver.get(url);
+    }
+
+    // Enter username
     public void setUsername(String username) {
-        this.username = username;
+        WebElement usernameField = driver.findElement(By.id("username"));
+        usernameField.sendKeys(username);
     }
 
+    // Enter password
     public void setPassword(String password) {
-        this.password = password;
+        WebElement passwordField = driver.findElement(By.id("password"));
+        passwordField.sendKeys(password);
     }
 
-    public void clickLogin() {
-        if ("testuser".equals(username) && "password123".equals(password)) {
-            isLoggedIn = true;
-        }
+    // Click the login button
+    public void clickLoginButton() {
+        WebElement loginButton = driver.findElement(By.cssSelector("button[type='submit']"));
+        loginButton.click();
     }
 
-    public boolean isLoggedIn() {
-        return isLoggedIn;
+    // Get the success message for validation
+    public String getSuccessMessage() {
+        WebElement messageElement = driver.findElement(By.id("flash"));
+        return messageElement.getText();
     }
 }
