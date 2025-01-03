@@ -3,15 +3,24 @@ package com.example.automation;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class LoginAutomationTest {
 
     @Test
     public void testLogin() {
-        // Set up WebDriver
-        System.setProperty("webdriver.chrome.driver", "C://Program Files//chromedriver//chromedriver");
-        WebDriver driver = new ChromeDriver();
+        // Set up WebDriver path
+        System.setProperty("webdriver.chrome.driver", "C://Program Files//chromedriver//chromedriver.exe");
+
+        // Set ChromeOptions for headless mode
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--headless"); // Run tests in headless mode (no UI)
+        options.addArguments("--disable-gpu"); // Disable GPU acceleration
+        options.addArguments("--window-size=1920,1080"); // Set screen size
+
+        WebDriver driver = new ChromeDriver(options);
 
         try {
             // Initialize the LoginPage object
