@@ -7,7 +7,7 @@ pipeline {
 
     environment {
         SONARQUBE_SERVER = 'sonarqube'
-        SONAR_TOKEN = credentials('sonar-token')  
+        SONAR_TOKEN = credentials('sonar-token')
     }
 
     stages {
@@ -44,10 +44,10 @@ pipeline {
               -Dsonar.projectName='maven_coverage3' \
               -Dsonar.host.url=http://localhost:9000 \
               -Dsonar.sources=src/main/java \
-               -Dsonar.test.inclusions=src/test/java/**/*.java \
-               -Dsonar.exclusions=src/main/java/**/*Test.java,**/test/**/* \
-               -Dsonar.java.binaries=target/classes \
-               -Dsonar.jacoco.reportPaths=target/site/jacoco/jacoco.xml \
+              -Dsonar.test.inclusions=src/test/java/**/*.java \
+              -Dsonar.exclusions=src/main/java/**/*Test.java,**/test/**/* \
+              -Dsonar.java.binaries=target/classes \
+              -Dsonar.jacoco.reportPaths=target/site/jacoco/jacoco.xml \
               -Dsonar.token=%SONAR_TOKEN%
                 '''
             }
@@ -61,16 +61,9 @@ pipeline {
         failure {
             echo "Did not work"
         }
-         post {
-    success {
-        echo "Successfully executed"
+        always {
+            archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
+            junit 'target/results/*.xml'
+        }
     }
-    failure {
-        echo "Did not work"
-    }
-    always {
-        archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
-        junit 'target/results/*.xml'
-    }
-}
 }
