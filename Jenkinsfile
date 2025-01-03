@@ -63,8 +63,7 @@ pipeline {
         }
          always {
             archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
-            junit 'target/test-results/*.xml'
+            junit 'target/results/*.xml'
         }
-
-    }
+}
 }
