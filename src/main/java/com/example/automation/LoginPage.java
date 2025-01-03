@@ -41,20 +41,9 @@ public class LoginPage {
         return messageElement.getText();
     }
 
-    // Perform logout
+    // Logout from the application
     public void logout() {
-        WebElement logoutButton = driver.findElement(By.cssSelector("a[href='/logout']")); // Assuming logout is a link
+        WebElement logoutButton = driver.findElement(By.cssSelector("a[href='/logout']"));
         logoutButton.click();
-    }
-
-    // Check if the current page is the login page
-    public boolean isLoginPageDisplayed() {
-        try {
-            driver.findElement(By.id("username")); // Assuming the username field is unique to the login page
-            driver.findElement(By.id("password"));
-            return true; // Elements are found, hence login page is displayed
-        } catch (Exception e) {
-            return false; // Elements not found, hence not on the login page
-        }
     }
 }
