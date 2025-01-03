@@ -1,43 +1,27 @@
 package com.example.automation;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class LoginAutomationTest {
 
     @Test
-    public void testLogin() {
-        // Set up the WebDriver
-        System.setProperty("webdriver.chrome.driver", "C://Program Files//chromedriver//chromedriver");
-        WebDriver driver = new ChromeDriver();
+    public void testLoginSuccess() {
+        LoginPage loginPage = new LoginPage();
+        loginPage.setUsername("testuser");
+        loginPage.setPassword("password123");
+        loginPage.clickLogin();
 
-        try {
-            // Navigate to the login page
-            driver.get("https://the-internet.herokuapp.com/login");
+        assertTrue(loginPage.isLoggedIn(), "User should be logged in successfully");
+    }
 
-            // Locate the username, password fields, and login button
-            WebElement usernameField = driver.findElement(By.id("username"));
-            WebElement passwordField = driver.findElement(By.id("password"));
-            WebElement loginButton = driver.findElement(By.cssSelector("button[type='submit']"));
+    @Test
+    public void testLoginFailure() {
+        LoginPage loginPage = new LoginPage();
+        loginPage.setUsername("wronguser");
+        loginPage.setPassword("wrongpassword");
+        loginPage.clickLogin();
 
-            // Perform login
-            usernameField.sendKeys("tomsmith");
-            passwordField.sendKeys("SuperSecretPassword!");
-            loginButton.click();
-
-            // Validate successful login
-            WebElement successMessage = driver.findElement(By.id("flash"));
-            assertTrue(successMessage.getText().contains("You logged into a secure area!"),
-                    "Login success message not found or incorrect!");
-
-        } finally {
-            // Close the browser
-            driver.quit();
-        }
+        assertTrue(!loginPage.isLoggedIn(), "User should not be logged in with incorrect credentials");
     }
 }
