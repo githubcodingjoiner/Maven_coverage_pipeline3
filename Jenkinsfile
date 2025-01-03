@@ -61,9 +61,16 @@ pipeline {
         failure {
             echo "Did not work"
         }
-         always {
-            archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
-            junit 'target/results/*.xml'
-        }
+         post {
+    success {
+        echo "Successfully executed"
+    }
+    failure {
+        echo "Did not work"
+    }
+    always {
+        archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
+        junit 'target/results/*.xml'
+    }
 }
 }
