@@ -40,10 +40,4 @@ public class LoginPage {
         WebElement messageElement = driver.findElement(By.id("flash"));
         return messageElement.getText();
     }
-
-    // Logout from the application
-    public void logout() {
-        WebElement logoutButton = driver.findElement(By.cssSelector("a[href='/logout']"));
-        logoutButton.click();
-    }
 }
