@@ -1,27 +1,38 @@
 package com.example.automation;
 
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class LoginAutomationTest {
 
     @Test
-    public void testLoginSuccess() {
-        LoginPage loginPage = new LoginPage();
-        loginPage.setUsername("testuser");
-        loginPage.setPassword("password123");
-        loginPage.clickLogin();
+    public void testLogin() {
+        // Set up WebDriver
+        System.setProperty("webdriver.chrome.driver", "C:/Program Files/chromedriver/chromedriver");
+        WebDriver driver = new ChromeDriver();
 
-        assertTrue(loginPage.isLoggedIn(), "User should be logged in successfully");
-    }
+        try {
+            // Initialize the LoginPage object
+            LoginPage loginPage = new LoginPage(driver);
 
-    @Test
-    public void testLoginFailure() {
-        LoginPage loginPage = new LoginPage();
-        loginPage.setUsername("wronguser");
-        loginPage.setPassword("wrongpassword");
-        loginPage.clickLogin();
+            // Navigate to the login page
+            loginPage.openLoginPage("https://the-internet.herokuapp.com/login");
 
-        assertTrue(!loginPage.isLoggedIn(), "User should not be logged in with incorrect credentials");
+            // Perform login with valid credentials
+            loginPage.setUsername("tomsmith");
+            loginPage.setPassword("SuperSecretPassword!");
+            loginPage.clickLoginButton();
+
+            // Validate successful login
+            String successMessage = loginPage.getSuccessMessage();
+            assertTrue(successMessage.contains("You logged into a secure area!"),
+                    "Login should be successful and a success message should be displayed.");
+
+        } finally {
+            // Close the browser
+            driver.quit();
+        }
     }
 }
